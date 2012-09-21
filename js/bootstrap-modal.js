@@ -32,6 +32,14 @@
       .delegate('[data-dismiss="modal"]', 'click.dismiss.modal', $.proxy(this.hide, this))
     this.options.remote && this.$element.find('.modal-body').load(this.options.remote)
   }
+  
+  function getBackdropParentEl(modelEl) {
+	var backdropParentEL = $(modelEl).closest("[data-backdrop='modal']");
+	if (backdropParentEL.length) {
+		return backdropParentEL;
+	}
+	return $(document.body);
+  }
 
   Modal.prototype = {
 
@@ -165,7 +173,7 @@
           var doAnimate = $.support.transition && animate
 
           this.$backdrop = $('<div class="modal-backdrop ' + animate + '" />')
-            .appendTo(document.body)
+            .appendTo(getBackdropParentEl(this.$element))
 
           if (this.options.backdrop != 'static') {
             this.$backdrop.click($.proxy(this.hide, this))
